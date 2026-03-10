@@ -1,0 +1,3 @@
+- [x] Add route for /categorias/:idCategoria/productos/nuevo in App.js
+- [x] Modify ProductForm to use useParams for idCategoria and hide select if present
+- [x] Test the changes (critical-path: verificar ruta, formulario y envío de id_categoria)
