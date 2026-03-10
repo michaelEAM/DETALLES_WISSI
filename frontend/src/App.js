@@ -5,9 +5,7 @@ import ProductList from './components/ProductList';
 import ProductForm from './components/ProductForm';
 import CategoryDashboard from './components/CategoryDashboard';
 import CategoryDetail from './components/CategoryDetail';
-
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
-console.log("API_BASE_URL:", API_BASE_URL);
+import FirebaseService from './services/FirebaseService';
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -15,40 +13,35 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch categories and products from API on mount
+  // Fetch categories and products from Firebase on mount
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const [catsRes, prodsRes] = await Promise.all([
-        fetch(`${API_BASE_URL}/api/categorias`),
-        fetch(`${API_BASE_URL}/api/productos`)
+      
+      const [catsData, prodsData] = await Promise.all([
+        FirebaseService.getCategories(),
+        FirebaseService.getProducts()
       ]);
 
-      if (!catsRes.ok || !prodsRes.ok) {
-        throw new Error('Error al cargar datos del servidor');
-      }
-
-      const catsData = await catsRes.json();
-      const prodsData = await prodsRes.json();
-
-      // Map backend to frontend
+      // Map Firebase data to frontend format
       const categoriesMapped = catsData.map(cat => ({
-        id: cat.id_categoria || cat.id,
+        id: cat.id,
         name: cat.nombre,
         description: cat.descripcion,
         products: []
       }));
+      
       const productsMapped = prodsData.map(prod => ({
-        id: prod.idProducto,
-        code: prod.codigo,
+        id: prod.id,
+        code: prod.codigo || '',
         name: prod.nombre,
-        description: prod.descripcion,
-        price: prod.precio,
-        imageUrl: prod.imagenUrl ? `${API_BASE_URL}${prod.imagenUrl}` : '',
-        stock: prod.stock,
+        description: prod.descripcion || '',
+        price: prod.precio || 0,
+        imageUrl: prod.imagenUrl || '',
+        stock: prod.stock || 0,
         category: prod.id_categoria || prod.categoriaId,
-        images: prod.imagenUrl ? [`${API_BASE_URL}${prod.imagenUrl}`] : []
+        images: prod.imagenUrl ? [prod.imagenUrl] : []
       }));
 
       // Populate categories.products
@@ -72,69 +65,49 @@ function App() {
 
   async function handleAdd(formData) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/productos`, {
-        method: 'POST',
-        body: formData
-      });
-      if (response.ok) {
-        fetchData();
-      } else {
-        alert('Error adding product');
-      }
+      // Convert FormData to object for Firebase
+      const productData = Object.fromEntries(formData.entries());
+      await FirebaseService.addProduct(productData);
+      fetchData();
     } catch (error) {
       console.error('Error:', error);
+      alert('Error adding product');
     }
   }
 
   async function handleUpdate(id, formData) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/productos/${id}`, {
-        method: 'PUT',
-        body: formData
-      });
-      if (response.ok) {
-        fetchData();
-      } else {
-        alert('Error updating product');
-      }
+      // Convert FormData to object for Firebase
+      const productData = Object.fromEntries(formData.entries());
+      await FirebaseService.updateProduct(id, productData);
+      fetchData();
     } catch (error) {
       console.error('Error:', error);
+      alert('Error updating product');
     }
   }
 
   async function handleDelete(id) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/productos/${id}`, { method: 'DELETE' });
-      if (response.ok) {
-        fetchData();
-      } else {
-        alert('Error deleting product');
-      }
+      await FirebaseService.deleteProduct(id);
+      fetchData();
     } catch (error) {
       console.error('Error:', error);
+      alert('Error deleting product');
     }
   }
 
   const handleAddCategory = useCallback(async (category) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/categorias`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre: category.name, descripcion: category.description })
-      });
-      if (response.ok) {
-        const newCategory = await response.json();
-        const categoryMapped = {
-          id: newCategory.id,
-          name: newCategory.nombre,
-          description: newCategory.descripcion,
-          products: []
-        };
-        setCategories(prev => [...prev, categoryMapped]);
-        return newCategory.id;
-      } else {
-        throw new Error('Error al agregar categoría');
-      }
+      const newId = await FirebaseService.addCategory(category);
+      const categoryMapped = {
+        id: newId,
+        name: category.name,
+        description: category.description,
+        products: []
+      };
+      setCategories(prev => [...prev, categoryMapped]);
+      return newId;
     } catch (error) {
       console.error('Error:', error);
       alert(error.message);
@@ -144,12 +117,8 @@ function App() {
 
   const handleDeleteCategory = useCallback(async (id) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/categorias/${id}`, { method: 'DELETE' });
-      if (response.ok) {
-        setCategories(prev => prev.filter(cat => cat.id !== id));
-      } else {
-        throw new Error('Error al eliminar categoría');
-      }
+      await FirebaseService.deleteCategory(id);
+      setCategories(prev => prev.filter(cat => cat.id !== id));
     } catch (error) {
       console.error('Error:', error);
       alert(error.message);
