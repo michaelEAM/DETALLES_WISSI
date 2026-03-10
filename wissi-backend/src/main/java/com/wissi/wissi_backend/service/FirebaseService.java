@@ -19,9 +19,9 @@ public class FirebaseService {
     public CompletableFuture<List<Map<String, Object>>> getCategories() {
         CompletableFuture<List<Map<String, Object>>> future = new CompletableFuture<>();
         
-        databaseReference.child("categorias").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DataSnapshot snapshot = task.getResult();
+        databaseReference.child("categorias").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
                 List<Map<String, Object>> categories = new ArrayList<>();
                 
                 if (snapshot.exists()) {
@@ -32,8 +32,11 @@ public class FirebaseService {
                     }
                 }
                 future.complete(categories);
-            } else {
-                future.completeExceptionally(task.getException());
+            }
+            
+            @Override
+            public void onCancelled(DatabaseError error) {
+                future.completeExceptionally(error.toException());
             }
         });
         
@@ -44,11 +47,11 @@ public class FirebaseService {
         CompletableFuture<String> future = new CompletableFuture<>();
         
         DatabaseReference newCategoryRef = databaseReference.child("categorias").push();
-        newCategoryRef.setValue(category).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                future.complete(newCategoryRef.getKey());
+        newCategoryRef.setValue(category, (databaseError, databaseReference) -> {
+            if (databaseError != null) {
+                future.completeExceptionally(databaseError.toException());
             } else {
-                future.completeExceptionally(task.getException());
+                future.complete(newCategoryRef.getKey());
             }
         });
         
@@ -58,14 +61,13 @@ public class FirebaseService {
     public CompletableFuture<Void> updateCategory(String id, Map<String, Object> category) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         
-        databaseReference.child("categorias").child(id).updateChildren(category)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        future.complete(null);
-                    } else {
-                        future.completeExceptionally(task.getException());
-                    }
-                });
+        databaseReference.child("categorias").child(id).updateChildren(category, (databaseError, databaseReference) -> {
+            if (databaseError != null) {
+                future.completeExceptionally(databaseError.toException());
+            } else {
+                future.complete(null);
+            }
+        });
         
         return future;
     }
@@ -73,14 +75,13 @@ public class FirebaseService {
     public CompletableFuture<Void> deleteCategory(String id) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         
-        databaseReference.child("categorias").child(id).removeValue()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        future.complete(null);
-                    } else {
-                        future.completeExceptionally(task.getException());
-                    }
-                });
+        databaseReference.child("categorias").child(id).removeValue((databaseError, databaseReference) -> {
+            if (databaseError != null) {
+                future.completeExceptionally(databaseError.toException());
+            } else {
+                future.complete(null);
+            }
+        });
         
         return future;
     }
@@ -89,9 +90,9 @@ public class FirebaseService {
     public CompletableFuture<List<Map<String, Object>>> getProducts() {
         CompletableFuture<List<Map<String, Object>>> future = new CompletableFuture<>();
         
-        databaseReference.child("productos").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DataSnapshot snapshot = task.getResult();
+        databaseReference.child("productos").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
                 List<Map<String, Object>> products = new ArrayList<>();
                 
                 if (snapshot.exists()) {
@@ -102,8 +103,11 @@ public class FirebaseService {
                     }
                 }
                 future.complete(products);
-            } else {
-                future.completeExceptionally(task.getException());
+            }
+            
+            @Override
+            public void onCancelled(DatabaseError error) {
+                future.completeExceptionally(error.toException());
             }
         });
         
@@ -114,11 +118,11 @@ public class FirebaseService {
         CompletableFuture<String> future = new CompletableFuture<>();
         
         DatabaseReference newProductRef = databaseReference.child("productos").push();
-        newProductRef.setValue(product).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                future.complete(newProductRef.getKey());
+        newProductRef.setValue(product, (databaseError, databaseReference) -> {
+            if (databaseError != null) {
+                future.completeExceptionally(databaseError.toException());
             } else {
-                future.completeExceptionally(task.getException());
+                future.complete(newProductRef.getKey());
             }
         });
         
@@ -128,14 +132,13 @@ public class FirebaseService {
     public CompletableFuture<Void> updateProduct(String id, Map<String, Object> product) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         
-        databaseReference.child("productos").child(id).updateChildren(product)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        future.complete(null);
-                    } else {
-                        future.completeExceptionally(task.getException());
-                    }
-                });
+        databaseReference.child("productos").child(id).updateChildren(product, (databaseError, databaseReference) -> {
+            if (databaseError != null) {
+                future.completeExceptionally(databaseError.toException());
+            } else {
+                future.complete(null);
+            }
+        });
         
         return future;
     }
@@ -143,14 +146,13 @@ public class FirebaseService {
     public CompletableFuture<Void> deleteProduct(String id) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         
-        databaseReference.child("productos").child(id).removeValue()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        future.complete(null);
-                    } else {
-                        future.completeExceptionally(task.getException());
-                    }
-                });
+        databaseReference.child("productos").child(id).removeValue((databaseError, databaseReference) -> {
+            if (databaseError != null) {
+                future.completeExceptionally(databaseError.toException());
+            } else {
+                future.complete(null);
+            }
+        });
         
         return future;
     }
