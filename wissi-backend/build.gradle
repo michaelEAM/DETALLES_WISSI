@@ -27,12 +27,7 @@ dependencies {
     // Firebase Admin SDK
     implementation 'com.google.firebase:firebase-admin:9.2.0'
     
-<<<<<<< HEAD
-=======
-    // Google Cloud Credentials
-    implementation 'com.google.cloud:google-cloud-storage:2.29.0'
-    
->>>>>>> 6ba9c49 (deploy: backend with mock service for production - no secrets)
+
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
