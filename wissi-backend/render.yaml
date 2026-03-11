@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: wissi-backend
+    env: java
+    plan: free
+    buildCommand: "./gradlew build"
+    startCommand: "./gradlew bootRun"
+    healthCheckPath: /api/categorias
+    envVars:
+      - key: firebase.enabled
+        value: false
+      - key: PORT
+        value: 8080
