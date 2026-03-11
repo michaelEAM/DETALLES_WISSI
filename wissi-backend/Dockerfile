@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM openjdk:17.0.9-jdk-slim-bullseye
 WORKDIR /app
 COPY . .
 RUN ./gradlew build -x test
