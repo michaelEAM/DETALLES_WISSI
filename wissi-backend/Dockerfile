@@ -1,4 +1,4 @@
-FROM openjdk:17.0.9-jdk-slim-bullseye
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY . .
 RUN ./gradlew build -x test
