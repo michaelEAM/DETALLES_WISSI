@@ -11,7 +11,7 @@ description = 'Proyecto API REST usando Spring Boot'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(21) // Cambiado a 21
     }
 }
 
@@ -23,19 +23,24 @@ dependencies {
     // Spring Boot Starters
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    
+
     // Firebase Admin SDK
     implementation 'com.google.firebase:firebase-admin:9.2.0'
-    
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    
+
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+// Configurar JAR fijo para Render
+bootJar {
+    archiveFileName = 'app.jar'
+}
+
+// Configurar JUnit
 tasks.named('test') {
     useJUnitPlatform()
 }
