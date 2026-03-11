@@ -2,11 +2,7 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY . .
-
-RUN ./gradlew build
-
-COPY build/libs/*.jar app.jar
+COPY target/*.jar app.jar
 
 EXPOSE 8080
 
