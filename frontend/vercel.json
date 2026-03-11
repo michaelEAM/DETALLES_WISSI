@@ -2,20 +2,20 @@
   "version": 2,
   "builds": [
     {
-      "src": "frontend/package.json",
+      "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "frontend/dist/wissi-frontend"
+        "distDir": "build"
       }
     }
   ],
   "routes": [
     {
+      "handle": "filesystem"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/index.html",
-      "headers": {
-        "cache-control": "s-maxage=0"
-      }
+      "dest": "/index.html"
     }
   ]
 }
