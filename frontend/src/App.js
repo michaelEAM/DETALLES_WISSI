@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import './App.css';
-import { HashRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import ProductList from './components/ProductList';
 import ProductForm from './components/ProductForm';
 import CategoryDashboard from './components/CategoryDashboard';
 import CategoryDetail from './components/CategoryDetail';
-import FirebaseService from './services/FirebaseService';
+import BackendService from './services/BackendService';
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -13,18 +13,18 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch categories and products from Firebase on mount
+  // Fetch categories and products from backend on mount
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
       
       const [catsData, prodsData] = await Promise.all([
-        FirebaseService.getCategories(),
-        FirebaseService.getProducts()
+        BackendService.getCategories(),
+        BackendService.getProducts()
       ]);
 
-      // Map Firebase data to frontend format
+      // Map backend data to frontend format
       const categoriesMapped = catsData.map(cat => ({
         id: cat.id,
         name: cat.nombre,
@@ -65,9 +65,9 @@ function App() {
 
   async function handleAdd(formData) {
     try {
-      // Convert FormData to object for Firebase
+      // Convert FormData to object for backend
       const productData = Object.fromEntries(formData.entries());
-      await FirebaseService.addProduct(productData);
+      await BackendService.addProduct(productData);
       fetchData();
     } catch (error) {
       console.error('Error:', error);
@@ -77,9 +77,9 @@ function App() {
 
   async function handleUpdate(id, formData) {
     try {
-      // Convert FormData to object for Firebase
+      // Convert FormData to object for backend
       const productData = Object.fromEntries(formData.entries());
-      await FirebaseService.updateProduct(id, productData);
+      await BackendService.updateProduct(id, productData);
       fetchData();
     } catch (error) {
       console.error('Error:', error);
@@ -89,7 +89,7 @@ function App() {
 
   async function handleDelete(id) {
     try {
-      await FirebaseService.deleteProduct(id);
+      await BackendService.deleteProduct(id);
       fetchData();
     } catch (error) {
       console.error('Error:', error);
@@ -99,7 +99,7 @@ function App() {
 
   const handleAddCategory = useCallback(async (category) => {
     try {
-      const newId = await FirebaseService.addCategory(category);
+      const newId = await BackendService.addCategory(category);
       const categoryMapped = {
         id: newId,
         name: category.name,
@@ -117,7 +117,7 @@ function App() {
 
   const handleDeleteCategory = useCallback(async (id) => {
     try {
-      await FirebaseService.deleteCategory(id);
+      await BackendService.deleteCategory(id);
       setCategories(prev => prev.filter(cat => cat.id !== id));
     } catch (error) {
       console.error('Error:', error);
