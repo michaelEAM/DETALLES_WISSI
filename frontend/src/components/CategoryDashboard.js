@@ -57,9 +57,21 @@ export default function CategoryDashboard({ categories, onAddCategory, onDeleteC
         {categories.length === 0 && <div className="empty">No hay categorías aún. Crea una usando "Agregar tipo de producto".</div>}
 
         {categories.map(cat => (
-          <div className="category-card-simple" key={cat.id} onClick={() => handleCategoryClick(cat)}>
-            <h3>{cat.name}</h3>
-            <div className="category-count">Productos: {cat.products?.length || 0}</div>
+          <div className="category-card-simple" key={cat.id}>
+            <div onClick={() => handleCategoryClick(cat)} className="category-content">
+              <h3>{cat.name}</h3>
+              <div className="category-count">Productos: {cat.products?.length || 0}</div>
+            </div>
+            <button 
+              className="btn-delete" 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteCategory(cat.id);
+              }}
+              title="Eliminar categoría"
+            >
+              🗑️
+            </button>
           </div>
         ))}
       </div>

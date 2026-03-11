@@ -48,13 +48,40 @@
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: box-shadow 0.2s, transform 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.category-content {
+  flex: 1;
   cursor: pointer;
-  text-align: center;
 }
 
 .category-card-simple:hover {
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   transform: translateY(-2px);
+}
+
+.btn-delete {
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  margin-left: 10px;
+}
+
+.btn-delete:hover {
+  background: #cc0000;
 }
 
 .category-card-simple h3 {
