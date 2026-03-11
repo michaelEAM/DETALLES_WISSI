@@ -1,6 +1,6 @@
 class BackendService {
   constructor() {
-    this.baseURL = 'https://wissi-backend.onrender.com';
+    this.baseURL = 'https://detalles-wissi.onrender.com';
   }
 
   // Categorías
