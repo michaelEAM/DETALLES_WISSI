@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import './App.css';
-import { HashRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import ProductList from './components/ProductList';
 import ProductForm from './components/ProductForm';
 import CategoryDashboard from './components/CategoryDashboard';

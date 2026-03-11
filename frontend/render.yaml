@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: detalles-wissi
+    env: static
+    buildCommand: npm run build
+    staticPublishPath: build
+    routes:
+      - src: /(.*)$
+        dest: /index.html
