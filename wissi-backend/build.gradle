@@ -11,7 +11,7 @@ description = 'Proyecto API REST usando Spring Boot'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21) // Cambiado a 21
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
