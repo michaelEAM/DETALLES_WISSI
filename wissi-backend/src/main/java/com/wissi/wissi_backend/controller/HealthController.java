@@ -2,11 +2,13 @@ package com.wissi.wissi_backend.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.wissi.wissi_backend.service.FirebaseService;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
+@CrossOrigin(origins = {"https://detalles-wissi.vercel.app", "http://localhost:3000"})
 public class HealthController {
 
     @Autowired

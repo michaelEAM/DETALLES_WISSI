@@ -2,6 +2,7 @@ package com.wissi.wissi_backend.controller;
 
 import com.wissi.wissi_backend.service.FirebaseService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/productos")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"https://detalles-wissi.vercel.app", "http://localhost:3000"})
 public class ProductoController {
 
     private final FirebaseService firebaseService;
@@ -45,5 +46,10 @@ public class ProductoController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) throws ExecutionException, InterruptedException {
         firebaseService.deleteProduct(id).get();
+    }
+
+    @RequestMapping(value = "/**", method = RequestMethod.OPTIONS)
+    public void handleOptions() {
+        // Método para manejar preflight requests
     }
 }
