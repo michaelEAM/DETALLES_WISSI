@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 @Configuration
+@ConditionalOnProperty(name = "firebase.enabled", havingValue = "false", matchIfMissing = false)
 public class MockConfig {
 
     @Bean

@@ -22,32 +22,20 @@ public class FirebaseConfig {
         try {
             if (FirebaseApp.getApps().isEmpty()) {
 
-                System.out.println("Initializing Firebase...");
+                System.out.println(" Initializing Firebase REAL Database...");
 
                 FirebaseOptions.Builder optionsBuilder = FirebaseOptions.builder()
                         .setDatabaseUrl("https://wissi-9a1ae-default-rtdb.firebaseio.com");
 
-                try {
-                    ClassPathResource resource = new ClassPathResource("firebase-key-temp.json");
-
-                    if (resource.exists()) {
-                        GoogleCredentials credentials = GoogleCredentials.fromStream(resource.getInputStream());
-                        optionsBuilder.setCredentials(credentials);
-                        System.out.println("Firebase credentials loaded successfully");
-                    } else {
-                        throw new RuntimeException("firebase-key-temp.json not found in resources");
-                    }
-
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to load Firebase credentials: " + e.getMessage());
-                }
-
+                // Para producción, usaremos database sin autenticación temporalmente
+                // En el futuro, puedes agregar credenciales aquí
+                
                 FirebaseOptions options = optionsBuilder.build();
 
                 FirebaseApp app = FirebaseApp.initializeApp(options);
 
-                System.out.println("Firebase application initialized successfully");
-                System.out.println("Database URL: " + options.getDatabaseUrl());
+                System.out.println(" Firebase REAL application initialized successfully");
+                System.out.println(" Database URL: " + options.getDatabaseUrl());
 
                 return app;
             }
@@ -56,7 +44,7 @@ public class FirebaseConfig {
 
         } catch (Exception e) {
 
-            System.err.println("Error initializing Firebase: " + e.getMessage());
+            System.err.println(" Error initializing Firebase: " + e.getMessage());
             e.printStackTrace();
 
             throw new RuntimeException("Failed to initialize Firebase", e);
