@@ -9,9 +9,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 
 @Configuration
 @ConditionalOnProperty(name = "firebase.enabled", havingValue = "true", matchIfMissing = false)
@@ -20,22 +19,22 @@ public class FirebaseConfig {
     @Bean
     public FirebaseApp firebaseApp() {
         try {
+
             if (FirebaseApp.getApps().isEmpty()) {
 
-                System.out.println(" Initializing Firebase REAL Database...");
+                System.out.println("🔥 Initializing Firebase REAL Database...");
 
-                FirebaseOptions.Builder optionsBuilder = FirebaseOptions.builder()
-                        .setDatabaseUrl("https://wissi-9a1ae-default-rtdb.firebaseio.com");
+                String firebaseCredentials = System.getenv("FIREBASE_CREDENTIALS");
 
-                // Para producción, usaremos database sin autenticación temporalmente
-                // En el futuro, puedes agregar credenciales aquí
-                
-                FirebaseOptions options = optionsBuilder.build();
+                FirebaseOptions options = FirebaseOptions.builder()
+                        .setCredentials(GoogleCredentials.fromStream(
+                                new ByteArrayInputStream(firebaseCredentials.getBytes())))
+                        .setDatabaseUrl("https://wissi-9a1ae-default-rtdb.firebaseio.com")
+                        .build();
 
                 FirebaseApp app = FirebaseApp.initializeApp(options);
 
-                System.out.println(" Firebase REAL application initialized successfully");
-                System.out.println(" Database URL: " + options.getDatabaseUrl());
+                System.out.println("✅ Firebase initialized successfully");
 
                 return app;
             }
@@ -44,8 +43,7 @@ public class FirebaseConfig {
 
         } catch (Exception e) {
 
-            System.err.println(" Error initializing Firebase: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("❌ Error initializing Firebase: " + e.getMessage());
 
             throw new RuntimeException("Failed to initialize Firebase", e);
         }
@@ -54,25 +52,10 @@ public class FirebaseConfig {
     @Bean
     public DatabaseReference databaseReference() {
 
-        try {
+        FirebaseApp app = firebaseApp();
 
-            FirebaseApp app = firebaseApp();
+        FirebaseDatabase database = FirebaseDatabase.getInstance(app);
 
-            FirebaseDatabase database = FirebaseDatabase.getInstance(app);
-
-            DatabaseReference ref = database.getReference();
-
-            System.out.println("DatabaseReference created successfully");
-
-            return ref;
-
-        } catch (Exception e) {
-
-            System.err.println("Error creating DatabaseReference: " + e.getMessage());
-
-            e.printStackTrace();
-
-            throw new RuntimeException("Failed to create DatabaseReference", e);
-        }
+        return database.getReference();
     }
 }
