@@ -15,6 +15,7 @@ public class FirebaseServiceImpl implements FirebaseServiceInterface {
 
     private final DatabaseReference databaseReference;
 
+    @Autowired
     public FirebaseServiceImpl(DatabaseReference databaseReference) {
         this.databaseReference = databaseReference;
     }
