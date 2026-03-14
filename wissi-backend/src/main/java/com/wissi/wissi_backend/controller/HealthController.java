@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.wissi.wissi_backend.service.FirebaseService;
+import com.wissi.wissi_backend.service.FirebaseServiceInterface;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 public class HealthController {
 
     @Autowired
-    private FirebaseService firebaseService;
+    private FirebaseServiceInterface firebaseService;
 
     @GetMapping("/health")
     public String health() {

@@ -1,6 +1,6 @@
 package com.wissi.wissi_backend.config;
 
-import com.wissi.wissi_backend.service.FirebaseService;
+import com.wissi.wissi_backend.service.FirebaseServiceInterface;
 import com.wissi.wissi_backend.service.MockFirebaseService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -13,9 +13,9 @@ public class MockConfig {
 
     @Bean
     @Primary
-    public FirebaseService firebaseService(MockFirebaseService mockFirebaseService) {
+    public FirebaseServiceInterface firebaseService(MockFirebaseService mockFirebaseService) {
         System.out.println("🔥 Using Mock Firebase Service for development");
-        return new FirebaseService() {
+        return new FirebaseServiceImpl() {
             @Override
             public java.util.concurrent.CompletableFuture<java.util.List<java.util.Map<String, Object>>> getCategories() {
                 return mockFirebaseService.getCategories();

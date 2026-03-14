@@ -1,6 +1,6 @@
 package com.wissi.wissi_backend.controller;
 
-import com.wissi.wissi_backend.service.FirebaseService;
+import com.wissi.wissi_backend.service.FirebaseServiceInterface;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -13,9 +13,9 @@ import java.util.concurrent.ExecutionException;
 @CrossOrigin(origins = {"https://detalles-wissi.vercel.app", "http://localhost:3000"})
 public class ProductoController {
 
-    private final FirebaseService firebaseService;
+    private final FirebaseServiceInterface firebaseService;
 
-    public ProductoController(FirebaseService firebaseService) {
+    public ProductoController(FirebaseServiceInterface firebaseService) {
         this.firebaseService = firebaseService;
     }
 

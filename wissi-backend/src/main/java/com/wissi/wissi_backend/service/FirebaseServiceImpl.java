@@ -11,10 +11,13 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class FirebaseServiceImpl implements FirebaseService {
+public class FirebaseServiceImpl implements FirebaseServiceInterface {
 
-    @Autowired
-    private DatabaseReference databaseReference;
+    private final DatabaseReference databaseReference;
+
+    public FirebaseServiceImpl(DatabaseReference databaseReference) {
+        this.databaseReference = databaseReference;
+    }
 
     // Categorías
     public CompletableFuture<List<Map<String, Object>>> getCategories() {
