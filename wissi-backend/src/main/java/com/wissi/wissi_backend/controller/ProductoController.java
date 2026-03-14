@@ -9,20 +9,6 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/productos")
-@CrossOrigin(
-        origins = {
-                "https://detalles-wissi.vercel.app",
-                "http://localhost:3000"
-        },
-        methods = {
-                RequestMethod.GET,
-                RequestMethod.POST,
-                RequestMethod.PUT,
-                RequestMethod.DELETE,
-                RequestMethod.OPTIONS
-        },
-        allowedHeaders = "*"
-)
 public class ProductoController {
 
     private final FirebaseServiceInterface firebaseService;
@@ -73,10 +59,5 @@ public class ProductoController {
             throws ExecutionException, InterruptedException {
 
         firebaseService.deleteProduct(id).get();
-    }
-
-    // Manejar solicitudes preflight OPTIONS
-    @RequestMapping(value = "/**", method = RequestMethod.OPTIONS)
-    public void handleOptions() {
     }
 }

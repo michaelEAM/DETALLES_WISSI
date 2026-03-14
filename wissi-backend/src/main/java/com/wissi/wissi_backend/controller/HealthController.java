@@ -6,20 +6,6 @@ import com.wissi.wissi_backend.service.FirebaseServiceInterface;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@CrossOrigin(
-        origins = {
-                "https://detalles-wissi.vercel.app",
-                "http://localhost:3000"
-        },
-        methods = {
-                RequestMethod.GET,
-                RequestMethod.POST,
-                RequestMethod.PUT,
-                RequestMethod.DELETE,
-                RequestMethod.OPTIONS
-        },
-        allowedHeaders = "*"
-)
 public class HealthController {
 
     private final FirebaseServiceInterface firebaseService;
@@ -66,10 +52,5 @@ public class HealthController {
                 .exceptionally(error ->
                         "❌ Error loading data: " + error.getMessage()
                 );
-    }
-
-    // Manejar solicitudes OPTIONS (preflight)
-    @RequestMapping(value = "/**", method = RequestMethod.OPTIONS)
-    public void handleOptions() {
     }
 }

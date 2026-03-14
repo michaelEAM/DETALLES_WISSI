@@ -9,20 +9,6 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/categorias")
-@CrossOrigin(
-        origins = {
-                "https://detalles-wissi.vercel.app",
-                "http://localhost:3000"
-        },
-        methods = {
-                RequestMethod.GET,
-                RequestMethod.POST,
-                RequestMethod.PUT,
-                RequestMethod.DELETE,
-                RequestMethod.OPTIONS
-        },
-        allowedHeaders = "*"
-)
 public class CategoriaController {
 
     private final FirebaseServiceInterface firebaseService;
@@ -73,10 +59,5 @@ public class CategoriaController {
             throws ExecutionException, InterruptedException {
 
         firebaseService.deleteCategory(id).get();
-    }
-
-    // Manejar solicitudes OPTIONS (preflight)
-    @RequestMapping(value = "/**", method = RequestMethod.OPTIONS)
-    public void handleOptions() {
     }
 }
