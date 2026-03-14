@@ -26,6 +26,11 @@ public class FirebaseConfig {
 
                 String firebaseCredentials = System.getenv("FIREBASE_CREDENTIALS");
 
+                // arreglar saltos de línea de la clave privada
+                firebaseCredentials = firebaseCredentials.replace("\\n", "\n");
+
+
+
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setCredentials(GoogleCredentials.fromStream(
                                 new ByteArrayInputStream(firebaseCredentials.getBytes())))
