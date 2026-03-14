@@ -1,5 +1,4 @@
 package com.wissi.wissi_backend.controller;
-package com.wissi.wissi_backend.controller;
 
 import org.springframework.web.bind.annotation.*;
 import com.wissi.wissi_backend.service.FirebaseServiceInterface;
