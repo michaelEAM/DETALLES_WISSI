@@ -20,12 +20,19 @@ public class FirebaseConfig {
     public FirebaseApp firebaseApp() {
         try {
             if (FirebaseApp.getApps().isEmpty()) {
-                System.out.println("🔥 Inicializando Firebase...");
+                System.out.println(" Inicializando Firebase...");
 
                 String firebaseCredentials = System.getenv("FIREBASE_CREDENTIALS");
-                if (firebaseCredentials == null) {
-                    throw new RuntimeException("FIREBASE_CREDENTIALS no está definido en Render");
+                
+                // Si no hay credenciales, inicializar sin ellas (para desarrollo local)
+                if (firebaseCredentials == null || firebaseCredentials.trim().isEmpty()) {
+                    System.out.println(" FIREBASE_CREDENTIALS no definido, usando modo sin autenticación");
+                    FirebaseOptions options = FirebaseOptions.builder()
+                            .setDatabaseUrl("https://wissi-9a1ae-default-rtdb.firebaseio.com")
+                            .build();
+                    return FirebaseApp.initializeApp(options);
                 }
+                
                 firebaseCredentials = firebaseCredentials.replace("\\n", "\n");
 
                 FirebaseOptions options = FirebaseOptions.builder()
@@ -38,13 +45,21 @@ public class FirebaseConfig {
             }
             return FirebaseApp.getInstance();
         } catch (Exception e) {
-            System.err.println("❌ Error inicializando Firebase: " + e.getMessage());
+            System.err.println(" Error inicializando Firebase: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     @Bean
     public DatabaseReference databaseReference(FirebaseApp app) {
-        return FirebaseDatabase.getInstance(app).getReference();
+        try {
+            FirebaseDatabase database = FirebaseDatabase.getInstance(app);
+            DatabaseReference ref = database.getReference();
+            System.out.println(" DatabaseReference bean creado exitosamente");
+            return ref;
+        } catch (Exception e) {
+            System.err.println(" Error creando DatabaseReference: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }
