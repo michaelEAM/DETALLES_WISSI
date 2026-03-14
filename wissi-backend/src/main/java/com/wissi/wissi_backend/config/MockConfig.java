@@ -1,59 +1,62 @@
 package com.wissi.wissi_backend.config;
 
-import com.wissi.wissi_backend.service.FirebaseServiceInterface;
-import com.wissi.wissi_backend.service.MockFirebaseService;
+import com.wissi.wissi_backend.service.FirebaseService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+
 @Configuration
-@ConditionalOnProperty(name = "firebase.enabled", havingValue = "false", matchIfMissing = false)
+@ConditionalOnProperty(name = "firebase.enabled", havingValue = "false")
 public class MockConfig {
 
     @Bean
     @Primary
-    public FirebaseServiceInterface firebaseService(MockFirebaseService mockFirebaseService) {
-        System.out.println("🔥 Using Mock Firebase Service for development");
-        return new FirebaseServiceImpl() {
+    public FirebaseService firebaseServiceMock() {
+
+        return new FirebaseService() {
+
             @Override
-            public java.util.concurrent.CompletableFuture<java.util.List<java.util.Map<String, Object>>> getCategories() {
-                return mockFirebaseService.getCategories();
+            public CompletableFuture<List<Map<String, Object>>> getCategories() {
+                return CompletableFuture.completedFuture(new ArrayList<>());
             }
 
             @Override
-            public java.util.concurrent.CompletableFuture<String> addCategory(java.util.Map<String, Object> category) {
-                return mockFirebaseService.addCategory(category);
+            public CompletableFuture<String> addCategory(Map<String, Object> category) {
+                return CompletableFuture.completedFuture("mock-category-id");
             }
 
             @Override
-            public java.util.concurrent.CompletableFuture<Void> updateCategory(String id, java.util.Map<String, Object> data) {
-                return mockFirebaseService.updateCategory(id, data);
+            public CompletableFuture<Void> updateCategory(String id, Map<String, Object> data) {
+                return CompletableFuture.completedFuture(null);
             }
 
             @Override
-            public java.util.concurrent.CompletableFuture<Void> deleteCategory(String id) {
-                return mockFirebaseService.deleteCategory(id);
+            public CompletableFuture<Void> deleteCategory(String id) {
+                return CompletableFuture.completedFuture(null);
             }
 
             @Override
-            public java.util.concurrent.CompletableFuture<java.util.List<java.util.Map<String, Object>>> getProducts() {
-                return mockFirebaseService.getProducts();
+            public CompletableFuture<List<Map<String, Object>>> getProducts() {
+                return CompletableFuture.completedFuture(new ArrayList<>());
             }
 
             @Override
-            public java.util.concurrent.CompletableFuture<String> addProduct(java.util.Map<String, Object> product) {
-                return mockFirebaseService.addProduct(product);
+            public CompletableFuture<String> addProduct(Map<String, Object> product) {
+                return CompletableFuture.completedFuture("mock-product-id");
             }
 
             @Override
-            public java.util.concurrent.CompletableFuture<Void> updateProduct(String id, java.util.Map<String, Object> data) {
-                return mockFirebaseService.updateProduct(id, data);
+            public CompletableFuture<Void> updateProduct(String id, Map<String, Object> data) {
+                return CompletableFuture.completedFuture(null);
             }
 
             @Override
-            public java.util.concurrent.CompletableFuture<Void> deleteProduct(String id) {
-                return mockFirebaseService.deleteProduct(id);
+            public CompletableFuture<Void> deleteProduct(String id) {
+                return CompletableFuture.completedFuture(null);
             }
         };
     }
