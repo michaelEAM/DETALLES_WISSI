@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/productos")
+@CrossOrigin(origins = {"https://detalles-wissi.vercel.app", "http://localhost:3000"})
 public class ProductoController {
 
     private final FirebaseServiceInterface firebaseService;

@@ -6,6 +6,7 @@ import com.wissi.wissi_backend.service.FirebaseServiceInterface;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
+@CrossOrigin(origins = {"https://detalles-wissi.vercel.app", "http://localhost:3000"})
 public class HealthController {
 
     private final FirebaseServiceInterface firebaseService;
